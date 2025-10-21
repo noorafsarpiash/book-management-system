@@ -1,8 +1,12 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
+const cors = require("cors");
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const port = process.env.PORT || 3000;
+
+app.use(express.json());
+app.use(cors());
 
 const uri = process.env.MONGODB_URL;
 
@@ -22,6 +26,11 @@ async function run() {
 
     const db = client.db("book-management-system");
     const booksCollection = db.collection("books");
+
+    app.post("/books", async (req, res) => {
+      const booksData = req.body;
+      console.log(booksData);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
