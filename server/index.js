@@ -27,9 +27,96 @@ async function run() {
     const db = client.db("book-management-system");
     const booksCollection = db.collection("books");
 
+    // post all books
+
     app.post("/books", async (req, res) => {
       const booksData = req.body;
-      console.log(booksData);
+
+      try {
+        const book = await booksCollection.insertOne(booksData);
+
+        res.status(201).json({ message: "Book Inserted successfully!", book });
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+    });
+
+    // get all books
+
+    app.get("/books", async (req, res) => {
+      const {
+        page,
+        limit,
+        genre,
+        minYear,
+        maxYear,
+        author,
+        minPrice,
+        maxPrice,
+        sortBy,
+        order,
+        search,
+      } = req.query;
+
+      try {
+        const currentPage = Math.max(1, parseInt(page) || 1);
+        const perPage = parseInt(limit) || 10;
+        const skip = (currentPage - 1) * perPage;
+
+        const filter = {};
+
+        if (search) {
+          filter.$or = [
+            { title: { $regex: search, $options: "i" } },
+            { description: { $regex: search, $options: "i" } },
+          ];
+        }
+
+        if (genre) filter.genre = genre;
+
+        if (minYear || maxYear) {
+          filter.publishedYear = {
+            ...(minYear && { $gte: parseInt(minYear) }),
+            ...(maxYear && { $lte: parseInt(maxYear) }),
+          };
+        }
+
+        if (author) filter.author = author;
+
+        if (minPrice || maxPrice) {
+          filter.price = {
+            ...(minPrice && { $gte: parseFloat(minPrice) }),
+            ...(maxPrice && { $lte: parseFloat(maxPrice) }),
+          };
+        }
+
+        const sortOptions = { [sortBy || "title"]: order === "desc" ? 1 : -1 };
+
+        const [books, totalBooks] = await Promise.all([
+          booksCollection
+            .find(filter)
+            .sort(sortOptions)
+            .skip(skip)
+            .limit(perPage)
+            .toArray(),
+          booksCollection.countDocuments(filter),
+        ]);
+
+        // const books = await booksCollection
+        //   .find(filter)
+        //   .sort(sortOptions)
+        //   .skip(skip)
+        //   .limit(perPage)
+        //   .toArray();
+        res.status(200).json({
+          books,
+          totalBooks,
+          currentPage,
+          totalpages: Math.ceil(totalBooks / perPage),
+        });
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
     });
 
     // Send a ping to confirm a successful connection
