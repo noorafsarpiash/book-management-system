@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 require("dotenv").config();
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
@@ -114,6 +114,41 @@ async function run() {
           currentPage,
           totalpages: Math.ceil(totalBooks / perPage),
         });
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+    });
+
+    app.get("/books/:id", async (req, res) => {
+      const bookId = req.params.id;
+
+      try {
+        const book = await booksCollection.findOne({
+          _id: new ObjectId(bookId),
+        });
+        if (!book) return res.status(404).json({ message: "Book not found" });
+        res.json(book);
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+    });
+
+    app.put("/books/:id", async (req, res) => {
+      try {
+        const updateBook = await booksCollection.updateOne(
+          { _id: new ObjectId(req.params.id) },
+          { $set: req.body }
+        );
+        res.json(updateBook);
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+    });
+
+    app.delete("/bools/:id", async (req, res) => {
+      try {
+        await booksCollection.deleteOne({ _id: new ObjectId(req.params.id) });
+        res.json({ message: "Book deleted successfully!" });
       } catch (error) {
         res.status(500).json({ error: error.message });
       }
