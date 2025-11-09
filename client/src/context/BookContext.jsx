@@ -72,9 +72,39 @@ export const BookProvider = ({ children }) => {
         }
     }, [filters])
 
+
     const clearCurrentBook = useCallback(() => {
         setBooks(null);
+
     }, [])
+
+
+    const updateFilters = useCallback(async (newFilters) => {
+        setFilters(prev => ({
+            ...prev,
+            ...newFilters,
+            page: newFilters.hasOwnPropert("page") ? newFilters.page : 1
+        }))
+    }, [])
+
+
+
+    const fetchBookDetails = useCallback(async (bookId) => {
+        try {
+            setLoading(true)
+            setError(null)
+            const response = await axios.get(`http://localhost:3000/books/${bookId}`)
+            setCurrentBook(response.data);
+            return response.data;
+
+
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false)
+        }
+    }, [])
+
 
     useEffect(() => {
         fetchBooks();
@@ -89,6 +119,8 @@ export const BookProvider = ({ children }) => {
         pagination,
         fetchBooks,
         clearCurrentBook,
+        updateFilters,
+        fetchBookDetails
     }
 
 

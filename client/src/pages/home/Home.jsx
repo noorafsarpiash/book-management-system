@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useBooks } from '../../context/BookContext'
+import Hero from '../../components/Hero';
 
 const Home = () => {
     const { books,
@@ -7,10 +8,10 @@ const Home = () => {
         loading,
         error } = useBooks();
 
-    console.log(books)
+    // console.log(books)
     return (
         <div>
-            Home
+            <Hero />
         </div>
     )
 }
