@@ -4,6 +4,7 @@ import './index.css'
 import App from './App.jsx'
 import { BrowserRouter, Route, Routes } from 'react-router'
 import Home from './pages/Home/Home.jsx'
+import Shop from './pages/shop/Shop.jsx'
 
 
 
@@ -15,7 +16,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/" element={<Home />} />
         <Route path="/ebooks" element={<div>Ebooks</div>} />
         <Route path="/membership " element={<div>Membership page</div>} />
-        <Route path="/books" element={<div>Shop page</div>} />
+        <Route path="/books" element={<Shop />} />
         <Route path="/books/add" element={<div>Add Book page</div>} />
       </Route>
     </Routes>

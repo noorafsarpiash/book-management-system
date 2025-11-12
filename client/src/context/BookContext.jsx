@@ -83,7 +83,7 @@ export const BookProvider = ({ children }) => {
         setFilters(prev => ({
             ...prev,
             ...newFilters,
-            page: newFilters.hasOwnPropert("page") ? newFilters.page : 1
+            page: newFilters.hasOwnProperty("page") ? newFilters.page : 1
         }))
     }, [])
 
