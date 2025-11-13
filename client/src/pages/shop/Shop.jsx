@@ -40,9 +40,17 @@ const Shop = () => {
         })
     }
 
+
+    const handlePageChange = (newPage) => {
+        updateFilters({
+            page: newPage,
+        })
+
+    }
+
     const handleDeleteBook = (bookId) => { }
 
-    console.log(books)
+    console.log(pagination)
     return (
         <div className='container mx-auto px-4 py-12 min-h-screen'>
 
@@ -75,7 +83,12 @@ const Shop = () => {
             </div>
 
 
-            {pagination.totalpages > 1 && (<Pagination />)}
+            {pagination.totalpages > 1 && (<Pagination
+                totalPages={pagination.totalpages}
+                currentPage={pagination.currentPage}
+                onPageChange={handlePageChange}
+
+            />)}
 
 
 
