@@ -3,6 +3,20 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 
 const Pagination = ({ totalPages, currentPage, onPageChange }) => {
+
+
+
+    const getPageNumbers = () => {
+        const pages = [];
+        if (totalPages <= 7) {
+            for (let i = 1; i <= totalPages; i++) {
+                pages.push(i);
+            }
+        }
+    }
+
+
+
     return (
         <div className='
         flex items-center justify-center space-x-2'>
