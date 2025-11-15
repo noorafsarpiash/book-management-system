@@ -90,7 +90,7 @@ async function run() {
           };
         }
 
-        const sortOptions = { [sortBy || "title"]: order === "desc" ? 1 : -1 };
+        const sortOptions = { [sortBy || "title"]: order === "desc" ? -1 : 1 };
 
         const [books, totalBooks] = await Promise.all([
           booksCollection
@@ -145,7 +145,7 @@ async function run() {
       }
     });
 
-    app.delete("/bools/:id", async (req, res) => {
+    app.delete("/books/:id", async (req, res) => {
       try {
         await booksCollection.deleteOne({ _id: new ObjectId(req.params.id) });
         res.json({ message: "Book deleted successfully!" });
