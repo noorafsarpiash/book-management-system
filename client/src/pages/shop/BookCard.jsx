@@ -42,6 +42,7 @@ const BookCard = ({ book, onDelete }) => {
                         >
                             Delete
                         </button>
+
                     </div>
                 </div>
             </div>

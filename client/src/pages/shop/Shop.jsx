@@ -4,6 +4,8 @@ import BookGrid from './BookGrid';
 import CategoryNav from './CategoryNav';
 import SortBooks from './SortBooks';
 import Pagination from './Pagination';
+import axios from 'axios';
+import { baseUrl } from '../../utils/baseUrl';
 
 const Shop = () => {
     const { books,
@@ -48,9 +50,20 @@ const Shop = () => {
 
     }
 
-    const handleDeleteBook = (bookId) => { }
+    const handleDeleteBook = async (id) => {
+        try {
+            await axios.delete(`${baseUrl}/books/${id}`);
+            alert('Book deleted successfully');
+        } catch (error) {
+            console.error('Error deleting book:', error.message);
+            alert("Error deleting book");
+        }
+    };
 
-    console.log(pagination)
+
+
+
+
     return (
         <div className='container mx-auto px-4 py-12 min-h-screen'>
 
@@ -65,7 +78,7 @@ const Shop = () => {
                 <div className='py-4 flex justify-end px-4'>
                     <SortBooks currentSort={{
                         sortBy: filters.sortBy,
-                        order: filters.sortOrder
+                        order: filters.order
                     }}
                         onSortChange={handleSortChange}
                     />

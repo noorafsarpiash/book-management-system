@@ -15,7 +15,7 @@ const Navbar = () => {
         { to: '/books', label: 'Shop' },
         { to: '/ebooks', label: 'Ebooks' },
         { to: '/membership', label: 'Membership' },
-        { to: '/books/add', label: 'Add Book' },
+        { to: '/book/add', label: 'Add Book' },
     ];
 
     return (
